@@ -52,7 +52,21 @@
         state: "present"
       become: true
 
-  
+    # GNOME settings
+    - name: "Enable Night Light"
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+        state: present
+        value: "true"
+    - name: "Set Night Light Temperature"
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
+        state: present
+        value: "5500"
+    # gsettings set org.gnome.desktop.interface clock-show-date false
+    # gsettings set org.gnome.desktop.interface clock-show-weekday true
+    # gsettings set org.gnome.desktop.calendar show-weekdate true
+
     # Cockpit
     - name: "Manage cockpit Packages"
       ansible.builtin.package:
