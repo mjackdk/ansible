@@ -63,10 +63,14 @@
         key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
         state: present
         value: "5500"
-    # gsettings set org.gnome.desktop.interface clock-show-date false
-    # gsettings set org.gnome.desktop.interface clock-show-weekday true
-    # gsettings set org.gnome.desktop.calendar show-weekdate true
-
+    
+    - name: "Calendar and Clock settings"
+      gsetting:
+        settings:
+          org.gnome.desktop.interface.clock-show-date: "false"
+          org.gnome.desktop.interface.clock-show-weekday: "true"
+          org.gnome.desktop.calendar.show-weekdate: "true"
+      
     - name: "Import RPM Fusion key"
       ansible.builtin.rpm_key:
         state: present
