@@ -67,6 +67,19 @@
     # gsettings set org.gnome.desktop.interface clock-show-weekday true
     # gsettings set org.gnome.desktop.calendar show-weekdate true
 
+    - name: "Import RPM Fusion key"
+      ansible.builtin.rpm_key:
+        state: present
+        key: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
+      become: true
+
+    - name: "Enable RPM Fusion repository"
+      ansible.builtin.dnf:
+        name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+        state: present
+      when: ansible_distribution == 'Fedora'
+      become: true
+
     # Cockpit
     - name: "Manage cockpit Packages"
       ansible.builtin.package:
