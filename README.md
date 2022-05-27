@@ -1,7 +1,14 @@
 # ansible
-Ansible playbooks for home network
+Ansible playbooks for Fedora Workstation and Fedora Server
+
+## Prerequisites
+``` bash
+$ sudo dnf install ansible
+```
 
 ## Workstation
+
+Only on localhost
 ``` bash
 $ ansible-playbook -K workstation.yml
 ```
@@ -10,6 +17,4 @@ $ ansible-playbook -K workstation.yml
 ## Server
 ``` bash
 $ ansible-playbook -i IP_ADDRESS, -K server.yml
-# Only on x86_64 systems
-$ ansible-playbook -i IP_ADDRESS, -K machines.yml
 ```

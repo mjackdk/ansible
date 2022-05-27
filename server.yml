@@ -136,3 +136,29 @@
       notify:
         - "Restart Cockpit Socket"
 
+    # Virtual Machines
+    - name: "Manage Virtualization Packages"
+      ansible.builtin.package:
+        name:
+          - "qemu-kvm-core"
+          - "libvirt"
+          - "virt-install"
+          - "guestfs-tools"
+        state: "present"
+      become: true
+      tags:
+        - "kvm"
+      when: ansible_architecture == "x86_64"
+
+    - name: "Manage cockpit Machines Packages"
+      ansible.builtin.package:
+        name: "cockpit-machines"
+        state: "present"
+      become: true
+      notify:
+        - "Restart Cockpit Socket"
+      tags:
+        - "cockpit"
+        - "kvm"
+      when: ansible_architecture == "x86_64"
+
