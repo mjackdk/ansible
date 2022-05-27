@@ -1,0 +1,142 @@
+- name: "Configure Fedora Workstation"
+  hosts: "localhost"
+  connection: "local"
+
+  handlers:
+
+    - name: "Restart Cockpit Socket"
+      ansible.builtin.service:
+        name: "cockpit.socket"
+        state: "restarted"
+      become: true
+      tags:
+        - "cockpit"
+        - "kvm"
+ 
+  tasks:
+
+    # Removal
+    - name: "Remove pre-installed packages"
+      ansible.builtin.package:
+        name:
+          - "rhythmbox"
+          - "gnome-tour"
+          - "gnome-text-editor"
+        state: "absent"
+      become: true
+
+    # Installation
+    - name: "Install GUI packages"
+      ansible.builtin.package:
+        name:
+          - "gnome-music"
+          - "evolution"
+          - "geary"
+          - "gnome-extensions-app"
+          - "nextcloud-client-nautilus"
+          - "seahorse"
+          - "mu"
+          - "pulseview"
+          - "thonny"
+          - "fritzing"
+          - "gedit"
+        state: "present"
+      become: true
+
+    - name: "Install CLI packages"
+      ansible.builtin.package:
+        name:
+          - "htop"
+          - "vim"
+          - "neofetch"
+        state: "present"
+      become: true
+
+  
+    # Cockpit
+    - name: "Manage cockpit Packages"
+      ansible.builtin.package:
+        name:
+          - "cockpit"
+          - "cockpit-selinux"
+        state: "present"
+      become: true
+
+    - name: "Manage cockpit Services"
+      ansible.builtin.service:
+        name: "cockpit.socket"
+        state: "started"
+      become: true
+
+    - name: "Manage cockpit Firewall Policy"
+      ansible.posix.firewalld:
+        service: "cockpit"
+        state: "enabled"
+        immediate: true
+        permanent: true
+      become: true
+
+    - name: "Manage pcp Packages"
+      ansible.builtin.package:
+        name:
+          - "pcp"
+          - "cockpit-pcp"
+        state: "present"
+      become: true
+
+    - name: "Manage pcp Services"
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: "started"
+      become: true
+      loop:
+        - "pmcd.service"
+        - "pmlogger.service"
+
+    # Containers
+    - name: "Manage Container Packages"
+      ansible.builtin.package:
+        name:
+          - "podman"
+        state: "present"
+      become: true
+
+    - name: "Manage Container Services"
+      ansible.builtin.service:
+        name: "podman.socket"
+        state: "started"
+        enabled: true
+      become: true
+
+    - name: "Manage cockpit Container Packages"
+      ansible.builtin.package:
+        name: "cockpit-podman"
+        state: "present"
+      become: true
+      notify:
+        - "Restart Cockpit Socket"
+
+    # Virtual Machines 
+    - name: "Manage Virtualization Packages"
+      ansible.builtin.package:
+        name:
+          - "qemu-kvm-core"
+          - "libvirt"
+          - "virt-install"
+          - "guestfs-tools"
+        state: "present"
+      become: true
+      tags:
+        - "kvm"
+
+    - name: "Manage cockpit Machines Packages"
+      ansible.builtin.package:
+        name: "cockpit-machines"
+        state: "present"
+      become: true
+      notify:
+        - "Restart Cockpit Socket"
+      tags:
+        - "cockpit"
+        - "kvm"
+
