@@ -1,0 +1,8 @@
+[user]
+	name = Michael Jack
+	email = 50518949+mjackdk@users.noreply.github.com
+	signingkey = CF54EC4D5469160C
+[core]
+	editor = code --wait
+[credential]
+	helper = store --file ~/Code/github/.credentials

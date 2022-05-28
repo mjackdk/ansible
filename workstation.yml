@@ -88,6 +88,42 @@
       when: ansible_distribution == 'Fedora'
       become: true
 
+    # Checking for .vimrc
+    - name: Check for .vimrc
+      ansible.builtin.stat:
+        path: ~/.vimrc
+      register: stat_vimrc
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/vimrc
+        dest: ~/.vimrc
+      when: stat_vimrc.stat.exists == False
+
+    # Checking for .bashrc
+    - name: Check for .bashrc
+      ansible.builtin.stat:
+        path: ~/.bashrc
+      register: stat_bashrc
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/bashrc
+        dest: ~/.bashrc
+      when: stat_bashrc.stat.exists == False
+
+    # Checking for .gitconfig
+    - name: Check for .gitconfig
+      ansible.builtin.stat:
+        path: ~/.gitconfig
+      register: stat_gitconfig
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/gitconfig
+        dest: ~/.gitconfig
+      when: stat_gitconfig.stat.exists == False
+
     # Visual Studio Code
     - name: "Enable Visual Studio Code repository"
       ansible.builtin.yum_repository:
