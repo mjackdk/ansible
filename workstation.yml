@@ -40,6 +40,7 @@
           - "thonny"
           - "fritzing"
           - "gedit"
+          - "transmission"
         state: "present"
       become: true
 
@@ -49,6 +50,7 @@
           - "htop"
           - "vim"
           - "neofetch"
+          - "powerline-go"
         state: "present"
       become: true
 
@@ -58,6 +60,7 @@
         key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
         state: present
         value: "true"
+
     - name: "Set Night Light Temperature"
       community.general.dconf:
         key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
@@ -70,7 +73,8 @@
           org.gnome.desktop.interface.clock-show-date: "false"
           org.gnome.desktop.interface.clock-show-weekday: "true"
           org.gnome.desktop.calendar.show-weekdate: "true"
-      
+ 
+    # RPM Fusion
     - name: "Import RPM Fusion key"
       ansible.builtin.rpm_key:
         state: present
@@ -82,6 +86,23 @@
         name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
         state: present
       when: ansible_distribution == 'Fedora'
+      become: true
+
+    # Visual Studio Code
+    - name: "Enable Visual Studio Code repository"
+      ansible.builtin.yum_repository:
+        name: "vscode"
+        description: "Visual Studio Code"
+        baseurl: "https://packages.microsoft.com/yumrepos/vscode" 
+        gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
+        gpgcheck: yes
+        state: present
+      become: true
+
+    - name: "Install Visual Studio Code"
+      ansible.builtin.package:
+        name: "code"
+        state: "present"
       become: true
 
     # Cockpit
