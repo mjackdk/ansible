@@ -10,9 +10,8 @@ dockitems_remove:
 - 'App Store'
 
 dockitems_persist:
-- name: "Vsual Studio Code"
-  path: "/Applications/Vsual Studio Code.app/"
-  pos: 5
+- name: "Visual Studio Code"
+  path: "/Applications/Visual Studio Code.app/"
 
 homebrew_installed_packages:
   - git
@@ -31,7 +30,7 @@ homebrew_taps:
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
   - arduino
-  - transmission 
+  - transmission
   - vagrant
   - virtualbox
   - virtualbox-extension-pack
