@@ -1,5 +1,5 @@
 ---
-- name: "Configure Fedora Workstation"
+- name: "Configure macOS"
   hosts: "localhost"
   connection: "local"
 
