@@ -3,12 +3,8 @@
   hosts: "localhost"
   connection: "local"
 
-  pre_tasks:
-    - name: Include playbook configuration.
-      include_vars: "{{ item }}"
-      with_fileglob:
-        - "{{ playbook_dir }}/config-macos.yml"
-      tags: ['always']
+  vars_files:
+    - config-macos.yml
 
   roles:
     - role: geerlingguy.mac.homebrew
