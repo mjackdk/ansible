@@ -29,5 +29,6 @@ $ sudo pip3 install --upgrade pip
 $ sudo pip3 install ansible
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
+$ ansible-galaxy install -r requirements.yml
 $ ansible-playbook -K macos.yml
 ```
