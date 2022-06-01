@@ -6,8 +6,10 @@ Ansible playbooks for Fedora Workstation, Fedora Server and macOS
 On localhost:
 ``` bash
 $ sudo dnf install ansible
+
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
+
 $ ansible-playbook -K workstation.yml
 ```
 
@@ -16,8 +18,10 @@ $ ansible-playbook -K workstation.yml
 On workstation, with ssh access to server:
 ``` bash
 $ sudo dnf install ansible
+
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
+
 $ ansible-playbook -i IP_ADDRESS, -K server.yml
 ```
 ## macOS
@@ -25,10 +29,13 @@ $ ansible-playbook -i IP_ADDRESS, -K server.yml
 On localhost:
 ``` bash
 $ xcode-select --install
+
 $ sudo pip3 install --upgrade pip
 $ sudo pip3 install ansible
+
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
+
 $ ansible-galaxy install -r requirements.yml
 $ ansible-playbook -K macos.yml
 ```
