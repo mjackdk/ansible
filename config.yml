@@ -1,0 +1,53 @@
+homebrew_installed_packages:
+  - git
+  - go
+  - gpg
+  - podman
+  - powerline-go
+  - python
+  - wget
+  - zsh
+
+homebrew_taps:
+  - homebrew/core
+  - homebrew/cask
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - arduino
+  - firefox
+  - transmission 
+  - vagrant
+  - virtualbox
+  - virtualbox-extension-pack
+  - visual-studio-code
+
+mas_installed_apps:
+  - { id: 1365531024, name: "1Blocker" }
+  - { id: 404705039, name: "Graphic" }
+    #  - { id: 409183694, name: "Keynote" }
+  - { id: 402058435, name: "Microsoft Excel"}
+  - { id: 985367838, name: "Microsoft Outlook"}
+  - { id: 462062816, name: "Microsoft Powerpoint"}
+  - { id: 462054704, name: "Microsoft Word"}
+    #  - { id: 409203825, name: "Numbers" }
+    #  - { id: 409201541, name: "Pages"}
+
+composer_packages:
+
+gem_packages:
+
+npm_packages:
+
+pip_packages:
+  - name: matplotlib
+  - name: numpy
+
+configure_dock: true
+dockitems_remove:
+  - Launchpad
+  - TV
+dockitems_persist:
+  - name: "Visual Studio Code"
+    path: "/Applications/Visual Studio Code.app/"
+    pos: 5
