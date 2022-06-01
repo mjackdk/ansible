@@ -13,7 +13,7 @@ $ ansible-playbook -K workstation.yml
 
 ## Fedora Server
 
-On workstation:
+On workstation, with ssh access to server:
 ``` bash
 $ sudo dnf install ansible
 $ git clone https://github.com/mjackdk/ansible.git
@@ -24,6 +24,7 @@ $ ansible-playbook -i IP_ADDRESS, -K server.yml
 
 On localhost:
 ``` bash
+$ xcode-select --install
 $ sudo pip3 install --upgrade pip
 $ sudo pip3 install ansible
 $ git clone https://github.com/mjackdk/ansible.git
