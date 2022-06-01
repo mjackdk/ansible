@@ -41,7 +41,7 @@ homebrew_cask_apps:
 mas_installed_apps:
   - { id: 1365531024, name: "1Blocker" }
 
-pip_packages: []
+pip_packages:
   - name: matplotlib
   - name: numpy
 
