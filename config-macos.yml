@@ -1,0 +1,49 @@
+---
+downloads: ~/.ansible-downloads/
+
+configure_dock: true
+
+dockitems_remove:
+- Launchpad
+- TV
+- Podcasts
+- 'App Store'
+
+dockitems_persist:
+- name: "Vsual Studio Code"
+  path: "/Applications/Vsual Studio Code.app/"
+  pos: 5
+
+homebrew_installed_packages:
+  - git
+  - go
+  - gpg
+  - podman
+  - powerline-go
+  - python
+  - wget
+  - zsh
+
+homebrew_taps:
+  - homebrew/core
+  - homebrew/cask
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - arduino
+  - transmission 
+  - vagrant
+  - virtualbox
+  - virtualbox-extension-pack
+  - visual-studio-code
+
+# See `geerlingguy.mas` role documentation for usage instructions.
+mas_installed_apps:
+  - { id: 1365531024, name: "1Blocker" }
+
+pip_packages: []
+  - name: matplotlib
+  - name: numpy
+
+# Glob pattern to ansible task files to run after all other tasks are finished.
+post_provision_tasks: []
