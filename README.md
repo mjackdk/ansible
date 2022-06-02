@@ -26,6 +26,8 @@ $ ansible-playbook -i IP_ADDRESS, -K server.yml
 ```
 ## macOS
 
+Log in to App Store before you begin the ansible setup.
+
 On localhost:
 ``` bash
 $ xcode-select --install
