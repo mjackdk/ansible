@@ -26,14 +26,15 @@ $ ansible-playbook -i IP_ADDRESS, -K server.yml
 ```
 ## macOS
 
-Log in to App Store before you begin the ansible setup.
+Log in to App Store before running the ansible playbook.
 
 On localhost:
 ``` bash
 $ xcode-select --install
 
-$ sudo pip3 install --upgrade pip
-$ sudo pip3 install ansible
+$ pip3 install --upgrade --user pip
+$ export PATH=$HOME/Library/Python/3.8/bin:$PATH
+$ pip3 install --user ansible
 
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
