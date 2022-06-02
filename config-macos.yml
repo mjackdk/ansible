@@ -5,8 +5,15 @@ configure_dock: true
 
 dockitems_remove:
 - Launchpad
+- Messages
+- Maps
+- Photos
+- FaceTime
+- Contacts
+- Notes
 - TV
 - Podcasts
+- 'System Preferences'
 - 'App Store'
 
 dockitems_persist:
@@ -14,6 +21,7 @@ dockitems_persist:
   path: "/Applications/Visual Studio Code.app/"
 
 homebrew_installed_packages:
+  - ansible
   - git
   - go
   - gpg
@@ -30,6 +38,8 @@ homebrew_taps:
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
   - arduino
+  - nextcloud
+  - raspberry-pi-imager
   - transmission
   - vagrant
   - virtualbox

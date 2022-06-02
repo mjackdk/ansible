@@ -120,7 +120,7 @@
 
     - name: Copy in if not exist
       ansible.builtin.copy:
-        src: files/gitconfig
+        src: files/linux-gitconfig
         dest: ~/.gitconfig
       when: stat_gitconfig.stat.exists == False
 

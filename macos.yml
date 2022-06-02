@@ -17,6 +17,43 @@
       tags: ['dock']
 
   tasks:
+
+    # Checking for .gitconfig
+    - name: Check for .gitconfig
+      ansible.builtin.stat:
+        path: ~/.gitconfig
+      register: stat_gitconfig
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/macos-gitconfig
+        dest: ~/.gitconfig
+      when: stat_gitconfig.stat.exists == False
+
+    # Checking for .vimrc
+    - name: Check for .vimrc
+      ansible.builtin.stat:
+        path: ~/.vimrc
+      register: stat_vimrc
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/vimrc
+        dest: ~/.vimrc
+      when: stat_vimrc.stat.exists == False
+
+    # Checking for .zshrc
+    - name: Check for .zshrc
+      ansible.builtin.stat:
+        path: ~/.zshrc
+      register: stat_zshrc
+
+    - name: Copy in if not exist
+      ansible.builtin.copy:
+        src: files/zshrc
+        dest: ~/.zshrc
+      when: stat_zshrc.stat.exists == False
+
     - block:
         - name: Run configured post-provision ansible task files.
           include_tasks: "{{ outer_item }}"
