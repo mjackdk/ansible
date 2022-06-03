@@ -54,6 +54,18 @@
         dest: ~/.zshrc
       when: stat_zshrc.stat.exists == False
 
+    - name: Enable tap to click
+      community.general.osx_defaults:
+        domain: com.apple.AppleMultitouchTrackpad
+        key: Clicking
+        type: int
+        value: 1
+
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: macbook
+        use: macos
+
     - block:
         - name: Run configured post-provision ansible task files.
           include_tasks: "{{ outer_item }}"

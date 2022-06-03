@@ -1,7 +1,8 @@
 # ansible
-Ansible playbooks for Fedora Workstation, Fedora Server and macOS
+Ansible playbooks for Fedora Workstation, Fedora Server and macOS. Tested on F36 and Big Sur.
 
 ## Fedora Workstation
+
 
 On localhost:
 ``` bash
@@ -42,3 +43,4 @@ $ cd ansible
 $ ansible-galaxy install -r requirements.yml
 $ ansible-playbook -K macos.yml
 ```
+A reboot might be needed for some changes to take effect
