@@ -1,5 +1,5 @@
 # ansible
-Ansible playbooks for Fedora Workstation, Fedora Server and macOS. Tested on F36 and Big Sur.
+Ansible playbooks for Fedora Workstation, Fedora Server and macOS. Tested on Fedora 36 and Big Sur.
 
 ## Fedora Workstation
 
