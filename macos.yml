@@ -61,10 +61,38 @@
         type: int
         value: 1
 
+    - name: Set startup settings in Terminal
+      community.general.osx_defaults:
+        domain: com.apple.terminal
+        key: Startup Window Settings
+        type: string
+        value: Pro
+
+    - name: Set default settings in Terminal
+      community.general.osx_defaults:
+        domain: com.apple.terminal
+        key: Default Window Settings
+        type: string
+        value: Pro
+
     - name: Set hostname
       ansible.builtin.hostname:
         name: macbook
         use: macos
+
+#    - name: Get current Terminal profile.
+#      command: defaults read com.apple.terminal 'Default Window Settings'
+#      register: terminal_theme
+#      changed_when: false
+#      check_mode: false
+
+#    - name: Ensure default Terminal profile is set to Pro.
+#      command: "{{ item }}"
+#      with_items:
+#        - defaults write com.apple.terminal 'Default Window Settings' -string Pro
+#        - defaults write com.apple.terminal 'Startup Window Settings' -string Pro
+#      changed_when: false
+#      when: "'Pro' not in terminal_theme.stdout"
 
     - block:
         - name: Run configured post-provision ansible task files.

@@ -17,8 +17,12 @@ dockitems_remove:
 - 'App Store'
 
 dockitems_persist:
+- name: "Terminal"
+  path: "/System/Applications/Utilities/Terminal.app/"
+  pos: 7
 - name: "Visual Studio Code"
   path: "/Applications/Visual Studio Code.app/"
+  pos: 8
 
 homebrew_installed_packages:
   - ansible
