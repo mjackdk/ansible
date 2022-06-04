@@ -126,6 +126,29 @@
           type: string
           value: "EEE HH:mm"
 
+      - name: "Ask for password after Screen Saver start"
+        community.general.osx_defaults:
+          domain: com.apple.screensaver
+          key: askForPassword
+          type: int
+          value: 1
+
+      - name: "Ask for password immediately after Screen Saver start"
+        community.general.osx_defaults:
+          domain: com.apple.screensaver
+          key: askForPasswordDelay
+          type: int
+          value: 0
+
+      - name: "Screen Saver idle time, in seconds"
+        community.general.osx_defaults:
+          host: currentHost
+          domain: com.apple.screensaver
+          key: idleTime
+          type: int
+          value: 300
+
+
       - name: "Set startup settings in Terminal"
         community.general.osx_defaults:
           domain: com.apple.terminal
