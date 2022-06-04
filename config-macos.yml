@@ -11,6 +11,7 @@ dockitems_remove:
 - FaceTime
 - Contacts
 - Notes
+- Music
 - TV
 - Podcasts
 - 'System Preferences'
@@ -19,9 +20,12 @@ dockitems_remove:
 dockitems_persist:
 - name: "Terminal"
   path: "/System/Applications/Utilities/Terminal.app/"
-  pos: 7
+  pos: 6
 - name: "Visual Studio Code"
   path: "/Applications/Visual Studio Code.app/"
+  pos: 7
+- name: "Arduino"
+  path: "/Applications/Arduino.app/"
   pos: 8
 
 homebrew_installed_packages:
@@ -29,6 +33,7 @@ homebrew_installed_packages:
   - git
   - go
   - gpg
+  - grep
   - podman
   - powerline-go
   - python

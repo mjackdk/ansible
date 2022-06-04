@@ -18,84 +18,142 @@
 
   tasks:
 
-    # Checking for .gitconfig
-    - name: Check for .gitconfig
-      ansible.builtin.stat:
-        path: ~/.gitconfig
-      register: stat_gitconfig
+    - name: "Check and copy dotfiles"
+      tags: "dotfiles"
+      block:
+      # Checking for .gitconfig
+      - name: "Check for .gitconfig"
+        ansible.builtin.stat:
+          path: ~/.gitconfig
+        register: stat_gitconfig
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/macos-gitconfig
-        dest: ~/.gitconfig
-      when: stat_gitconfig.stat.exists == False
+      - name: "Copy in if not exist"
+        ansible.builtin.copy:
+          src: files/macos-gitconfig
+          dest: ~/.gitconfig
+        when: stat_gitconfig.stat.exists == False
 
-    # Checking for .vimrc
-    - name: Check for .vimrc
-      ansible.builtin.stat:
-        path: ~/.vimrc
-      register: stat_vimrc
+      # Checking for .vimrc
+      - name: "Check for .vimrc"
+        ansible.builtin.stat:
+          path: ~/.vimrc
+        register: stat_vimrc
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/vimrc
-        dest: ~/.vimrc
-      when: stat_vimrc.stat.exists == False
+      - name: "Copy in if not exist"
+        ansible.builtin.copy:
+          src: files/vimrc
+          dest: ~/.vimrc
+        when: stat_vimrc.stat.exists == False
 
-    # Checking for .zshrc
-    - name: Check for .zshrc
-      ansible.builtin.stat:
-        path: ~/.zshrc
-      register: stat_zshrc
+      # Checking for .zshrc
+      - name: "Check for .zshrc"
+        ansible.builtin.stat:
+          path: ~/.zshrc
+        register: stat_zshrc
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/zshrc
-        dest: ~/.zshrc
-      when: stat_zshrc.stat.exists == False
+      - name: "Copy in if not exist"
+        ansible.builtin.copy:
+          src: files/zshrc
+          dest: ~/.zshrc
+        when: stat_zshrc.stat.exists == False
 
-    - name: Enable tap to click
-      community.general.osx_defaults:
-        domain: com.apple.AppleMultitouchTrackpad
-        key: Clicking
-        type: int
-        value: 1
+  
+    - name: "Settings and defaults"
+      tags: "settings"
+      block:
+      - name: "Enable tap to click I"
+        community.general.osx_defaults:
+          domain: com.apple.AppleMultitouchTrackpad
+          key: Clicking
+          type: bool
+          value: true
 
-    - name: Set startup settings in Terminal
-      community.general.osx_defaults:
-        domain: com.apple.terminal
-        key: Startup Window Settings
-        type: string
-        value: Pro
+      - name: "Enable tap to click II"
+        community.general.osx_defaults:
+          host: NSGlobalDomain
+          domain: com.apple.mouse
+          key: tapBehavior
+          type: int
+          value: 1
 
-    - name: Set default settings in Terminal
-      community.general.osx_defaults:
-        domain: com.apple.terminal
-        key: Default Window Settings
-        type: string
-        value: Pro
+      - name: "Enable tap to click III"
+        community.general.osx_defaults:
+          host: -currentHost
+          domain: com.apple.mouse
+          key: Clicking
+          type: int
+          value: 1
 
-    - name: Set hostname
-      ansible.builtin.hostname:
-        name: macbook
-        use: macos
+      - name: "Avoid creating .DS_Store files on network volumes"
+        community.general.osx_defaults:
+          domain: com.apple.desktopservices
+          key: DSDontWriteNetworkStores
+          type: bool
+          value: true
 
-#    - name: Get current Terminal profile.
-#      command: defaults read com.apple.terminal 'Default Window Settings'
-#      register: terminal_theme
-#      changed_when: false
-#      check_mode: false
+      - name: "Avoid creating .DS_Store files on USB volumes"
+        community.general.osx_defaults:
+          domain: com.apple.desktopservices
+          key: DSDontWriteUSBStores
+          type: bool
+          value: true
 
-#    - name: Ensure default Terminal profile is set to Pro.
-#      command: "{{ item }}"
-#      with_items:
-#        - defaults write com.apple.terminal 'Default Window Settings' -string Pro
-#        - defaults write com.apple.terminal 'Startup Window Settings' -string Pro
-#      changed_when: false
-#      when: "'Pro' not in terminal_theme.stdout"
+      - name: "Disable recent items in Dock"
+        community.general.osx_defaults:
+          domain: com.apple.dock
+          key: show-recents
+          type: int
+          value: 0
+
+      - name: "Disable open animmation in Dock"
+        community.general.osx_defaults:
+          domain: com.apple.dock
+          key: launchanim
+          type: bool
+          value: false
+
+      - name: "Show status bar in Finder"
+        community.general.osx_defaults:
+          domain: com.apple.finder
+          key: ShowStatusBar
+          type: bool
+          value: true
+
+      - name: "Change date format in menu"
+        community.general.osx_defaults:
+          domain: com.apple.menuextra.clock
+          key: DateFormat
+          type: string
+          value: "EEE HH:mm"
+
+      - name: "Set startup settings in Terminal"
+        community.general.osx_defaults:
+          domain: com.apple.terminal
+          key: Startup Window Settings
+          type: string
+          value: Pro
+
+      - name: "Set default settings in Terminal"
+        community.general.osx_defaults:
+          domain: com.apple.terminal
+          key: Default Window Settings
+          type: string
+          value: Pro
+
+      - name: "Autohide Dock"
+        community.general.osx_defaults:
+          domain: com.apple.dock
+          key: autohide
+          type: bool
+          value: true
+
+      - name: "Set hostname"
+        ansible.builtin.hostname:
+          name: macbook
+          use: macos
 
     - block:
-        - name: Run configured post-provision ansible task files.
+        - name: "Run configured post-provision ansible task files"
           include_tasks: "{{ outer_item }}"
           loop_control:
             loop_var: outer_item
