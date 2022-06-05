@@ -21,8 +21,8 @@ dockitems_persist:
 - name: "Terminal"
   path: "/System/Applications/Utilities/Terminal.app/"
   pos: 6
-- name: "BBEdit"
-  path: "/Applications/BBEdit.app/"
+- name: "Visual Studio Code"
+  path: "/Applications/Visual Studio Code.app/"
   pos: 7
 
 homebrew_installed_packages:
@@ -48,14 +48,16 @@ homebrew_cask_apps:
   - nextcloud
   - raspberry-pi-imager
   - transmission
+  - visual-studio-code
   - vlc
 
 # See `geerlingguy.mas` role documentation for usage instructions.
 mas_installed_apps:
-  - { id: 404009241, name: "BBEdit" }
-  - { id: 409183694, name: "Keynote" }
-  - { id: 409203825, name: "Numbers" }
-  - { id: 409201541, name: "Pages" }
+  - { id: 1440147259, name: "AdGuard for Safari" }
+  - { id: 462058435, name: "Microsoft Excel" }
+  - { id: 985367838, name: "Microsoft Outlook" }
+  - { id: 462062816, name: "Microsoft Powerpoint" }
+  - { id: 462054704, name: "Microsoft Word" }
 
 pip_packages:
   - name: matplotlib
