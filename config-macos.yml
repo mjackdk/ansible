@@ -53,7 +53,7 @@ homebrew_cask_apps:
 
 # See `geerlingguy.mas` role documentation for usage instructions.
 mas_installed_apps:
-  - { id: 1440147259, name: "AdGuard for Safari" }
+  - { id: 1365531024, name: "1Blocker" }
   - { id: 462058435, name: "Microsoft Excel" }
   - { id: 985367838, name: "Microsoft Outlook" }
   - { id: 462062816, name: "Microsoft Powerpoint" }
