@@ -4,6 +4,7 @@
 	signingkey = CF54EC4D5469160C
 [core]
 	editor = code --wait
-[credential]
-	helper = /usr/local/bin/git-credential-manager-core
-	credentialStore = secretservice
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
