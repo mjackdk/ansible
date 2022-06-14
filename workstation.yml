@@ -4,227 +4,252 @@
 
   handlers:
 
-    - name: "Restart Cockpit Socket"
+    - name: "Restart cockpit socket"
       ansible.builtin.service:
         name: "cockpit.socket"
         state: "restarted"
       become: true
       tags:
         - "cockpit"
+        - "podman"
         - "kvm"
  
   tasks:
 
-    # Removal
-    - name: "Remove pre-installed packages"
-      ansible.builtin.package:
-        name:
-          - "rhythmbox"
-          - "gnome-tour"
-          - "gnome-text-editor"
-        state: "absent"
-      become: true
+    - name: "Install/remove general software"
+      tags: "software"
+      block:
 
-    # Installation
-    - name: "Install GUI packages"
-      ansible.builtin.package:
-        name:
-          - "gnome-music"
-          - "evolution"
-          - "geary"
-          - "gnome-extensions-app"
-          - "nextcloud-client-nautilus"
-          - "seahorse"
-          - "mu"
-          - "pulseview"
-          - "thonny"
-          - "fritzing"
-          - "gedit"
-          - "transmission"
-        state: "present"
-      become: true
+      - name: "Remove preinstalled packages"
+        ansible.builtin.package:
+          name:
+            - "gnome-tour"
+            - "rhythmbox"
+          state: "absent"
+        become: true
 
-    - name: "Install CLI packages"
-      ansible.builtin.package:
-        name:
-          - "htop"
-          - "vim"
-          - "neofetch"
-          - "powerline-go"
-        state: "present"
-      become: true
+      - name: "Install new packages"
+        ansible.builtin.package:
+          name:
+            - "evolution"
+            - "fritzing"
+            - "geary"
+            - "gnome-extensions-app"
+            - "gnome-music"
+            - "htop"
+            - "mu"
+            - "neofetch"
+            - "nextcloud-client-nautilus"
+            - "powerline-go"
+            - "pulseview"
+            - "seahorse"
+            - "sigrok-firmware-fx2lafw"
+            - "thonny"
+            - "transmission"
+            - "vim"
+          state: "present"
+        become: true
 
-    # GNOME settings
-    - name: "Enable Night Light"
-      community.general.dconf:
-        key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
-        state: present
-        value: "true"
+      - name: "Import RPM Fusion key"
+        ansible.builtin.rpm_key:
+          state: present
+          key: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
+        when: ansible_distribution == 'Fedora'
+        become: true
 
-    - name: "Set Night Light Temperature"
-      community.general.dconf:
-        key: "/org/gnome/settings-daemon/plugins/color/night-light-temperature"
-        state: present
-        value: "5500"
-    
-    - name: "Calendar and Clock settings"
-      gsetting:
-        settings:
-          org.gnome.desktop.interface.clock-show-date: "false"
-          org.gnome.desktop.interface.clock-show-weekday: "true"
-          org.gnome.desktop.calendar.show-weekdate: "true"
- 
-    # RPM Fusion
-    - name: "Import RPM Fusion key"
-      ansible.builtin.rpm_key:
-        state: present
-        key: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
-      become: true
+      - name: "Enable RPM Fusion repository"
+        ansible.builtin.dnf:
+          name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
+          state: present
+        when: ansible_distribution == 'Fedora'
+        become: true
 
-    - name: "Enable RPM Fusion repository"
-      ansible.builtin.dnf:
-        name: "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm"
-        state: present
-      when: ansible_distribution == 'Fedora'
-      become: true
+      - name: "Install GStreamer libav"
+        ansible.builtin.package:
+          name:
+            - "gstreamer1-libav"
+          state: "present"
+        become: true
 
-    # Checking for .vimrc
-    - name: Check for .vimrc
-      ansible.builtin.stat:
-        path: ~/.vimrc
-      register: stat_vimrc
+      - name: "Enable Visual Studio Code repository"
+        ansible.builtin.yum_repository:
+          name: "vscode"
+          description: "Visual Studio Code"
+          baseurl: "https://packages.microsoft.com/yumrepos/vscode" 
+          gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
+          gpgcheck: yes
+          state: present
+        become: true
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/vimrc
-        dest: ~/.vimrc
-      when: stat_vimrc.stat.exists == False
+      - name: "Install Visual Studio Code"
+        ansible.builtin.package:
+          name: "code"
+          state: "present"
+        become: true
 
-    # Checking for .bashrc
-    - name: Check for .bashrc
-      ansible.builtin.stat:
-        path: ~/.bashrc
-      register: stat_bashrc
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/bashrc
-        dest: ~/.bashrc
-      when: stat_bashrc.stat.exists == False
+    - name: "Settings"
+      tags: "settings"
+      block:
 
-    # Checking for .gitconfig
-    - name: Check for .gitconfig
-      ansible.builtin.stat:
-        path: ~/.gitconfig
-      register: stat_gitconfig
+      - name: "Enable Tap to Click"
+        community.general.dconf:
+          key: "/org/gnome/desktop/peripherals/touchpad/tap-to-click"
+          value: "true"
 
-    - name: Copy in if not exist
-      ansible.builtin.copy:
-        src: files/linux-gitconfig
-        dest: ~/.gitconfig
-      when: stat_gitconfig.stat.exists == False
+      - name: "Show Calendar week number"
+        community.general.dconf:
+          key: "/org/gnome/desktop/calendar/show-weekdate"
+          value: "true"
 
-    # Visual Studio Code
-    - name: "Enable Visual Studio Code repository"
-      ansible.builtin.yum_repository:
-        name: "vscode"
-        description: "Visual Studio Code"
-        baseurl: "https://packages.microsoft.com/yumrepos/vscode" 
-        gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
-        gpgcheck: yes
-        state: present
-      become: true
+      - name: "Show Clock date"
+        community.general.dconf:
+          key: "/org/gnome/desktop/interface/clock-show-date"
+          value: "false"
 
-    - name: "Install Visual Studio Code"
-      ansible.builtin.package:
-        name: "code"
-        state: "present"
-      become: true
+      - name: "Show Clock weekday"
+        community.general.dconf:
+          key: "/org/gnome/desktop/interface/clock-show-weekday"
+          value: "true"
 
-    # Cockpit
-    - name: "Manage cockpit Packages"
-      ansible.builtin.package:
-        name:
-          - "cockpit"
-          - "cockpit-selinux"
-        state: "present"
-      become: true
+      - name: "Terminal custom font"
+        community.general.dconf:
+          key: "/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-system-font"
+          value: "false"
 
-    - name: "Manage cockpit Services"
-      ansible.builtin.service:
-        name: "cockpit.socket"
-        state: "started"
-      become: true
+      - name: "TextEditor custom font"
+        community.general.dconf:
+          key: "/org/gnome/TextEditor/custom-font"
+          value: "'Monospace 12'"
 
-    - name: "Manage cockpit Firewall Policy"
-      ansible.posix.firewalld:
-        service: "cockpit"
-        state: "enabled"
-        immediate: true
-        permanent: true
-      become: true
+      - name: "TextEditor highlight current line"
+        community.general.dconf:
+          key: "/org/gnome/TextEditor/highlight-current-line"
+          value: "true"
 
-    - name: "Manage pcp Packages"
-      ansible.builtin.package:
-        name:
-          - "pcp"
-          - "cockpit-pcp"
-        state: "present"
-      become: true
 
-    - name: "Manage pcp Services"
-      ansible.builtin.service:
-        name: "{{ item }}"
-        state: "started"
-      become: true
-      loop:
-        - "pmcd.service"
-        - "pmlogger.service"
+    - name: "Dot files"
+      tags: "dotfiles"
+      block:
 
-    # Containers
-    - name: "Manage Container Packages"
-      ansible.builtin.package:
-        name:
-          - "podman"
-        state: "present"
-      become: true
+      - name: "Create .bashrc.d, if not found"
+        ansible.builtin.file:
+          path: ~/.bashrc.d
+          state: directory
+          mode: '0755'
 
-    - name: "Manage Container Services"
-      ansible.builtin.service:
-        name: "podman.socket"
-        state: "started"
-        enabled: true
-      become: true
+      - name: "Check for bashrc.local"
+        ansible.builtin.stat:
+          path: ~/.bashrc.d/bashrc.local
+        register: stat_bashrc
 
-    - name: "Manage cockpit Container Packages"
-      ansible.builtin.package:
-        name: "cockpit-podman"
-        state: "present"
-      become: true
-      notify:
-        - "Restart Cockpit Socket"
+      - name: "Copy bashrc.local in, if not found"
+        ansible.builtin.copy:
+          src: files/bashrc.local
+          dest: ~/.bashrc.d/bashrc.local
+        when: stat_bashrc.stat.exists == False
 
-    # Virtual Machines 
-    - name: "Manage Virtualization Packages"
-      ansible.builtin.package:
-        name:
-          - "qemu-kvm-core"
-          - "libvirt"
-          - "virt-install"
-          - "guestfs-tools"
-        state: "present"
-      become: true
-      tags:
-        - "kvm"
+      - name: "Check for .vimrc"
+        ansible.builtin.stat:
+          path: ~/.vimrc
+        register: stat_vimrc
 
-    - name: "Manage cockpit Machines Packages"
-      ansible.builtin.package:
-        name: "cockpit-machines"
-        state: "present"
-      become: true
-      notify:
-        - "Restart Cockpit Socket"
-      tags:
-        - "cockpit"
-        - "kvm"
+      - name: "Copy .vimrc in, if not found"
+        ansible.builtin.copy:
+          src: files/vimrc
+          dest: ~/.vimrc
+        when: stat_vimrc.stat.exists == False
+
+      - name: "Check for .gitconfig"
+        ansible.builtin.stat:
+          path: ~/.gitconfig
+        register: stat_gitconfig
+
+      - name: "Copy .gitconfig in, if not found"
+        ansible.builtin.copy:
+          src: files/linux-gitconfig
+          dest: ~/.gitconfig
+        when: stat_gitconfig.stat.exists == False
+
+
+    - name: "Cockpit"
+      tags: "cockpit"
+      block:
+      - name: "Install cockpit packages"
+        ansible.builtin.package:
+          name:
+            - "cockpit"
+            - "cockpit-selinux"
+            - "pcp"
+            - "cockpit-pcp"
+          state: "present"
+        become: true
+
+      - name: "Manage cockpit related services"
+        ansible.builtin.service:
+          name: "{{ item }}"
+          state: "started"
+        become: true
+        loop:
+          - "cockpit.socket"
+          - "pmcd.service"
+          - "pmlogger.service"
+
+      - name: "Manage cockpit firewall policy"
+        ansible.posix.firewalld:
+          service: "cockpit"
+          state: "enabled"
+          immediate: true
+          permanent: true
+        become: true
+
+
+    - name: "Containers"
+      tags: "podman"
+      block:
+      
+      - name: "Install podman package"
+        ansible.builtin.package:
+          name:
+            - "podman"
+          state: "present"
+        become: true
+
+      - name: "Manage podman service"
+        ansible.builtin.service:
+          name: "podman.socket"
+          state: "started"
+          enabled: true
+        become: true
+
+      - name: "Install cockpit Podman package"
+        ansible.builtin.package:
+          name: "cockpit-podman"
+          state: "present"
+        become: true
+        notify:
+          - "Restart cockpit socket"
+
+
+    - name: "Virtual machines"
+      tags: "kvm"
+      block:
+
+      - name: "Install virtualization packages"
+        ansible.builtin.package:
+          name:
+            - "qemu-kvm-core"
+            - "libvirt"
+            - "virt-install"
+            - "guestfs-tools"
+          state: "present"
+        become: true
+
+      - name: "Install cockpit Machines package"
+        ansible.builtin.package:
+          name: "cockpit-machines"
+          state: "present"
+        become: true
+        notify:
+          - "Restart cockpit socket"
 

@@ -6,7 +6,7 @@ Ansible playbooks for Fedora Workstation, Fedora Server and macOS. Tested on Fed
 
 On localhost:
 ``` bash
-$ sudo dnf install ansible
+$ sudo dnf install ansible python3-psutil
 
 $ git clone https://github.com/mjackdk/ansible.git
 $ cd ansible
