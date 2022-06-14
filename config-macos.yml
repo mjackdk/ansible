@@ -28,6 +28,7 @@ dockitems_persist:
 homebrew_installed_packages:
   - ansible
   - git
+  - gh
   - go
   - gpg
   - grep
